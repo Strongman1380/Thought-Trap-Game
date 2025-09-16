@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thought Trap Escape</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div id="app" class="container mx-auto px-4 py-8">
+        <!-- App Shell with Router Simulation -->
+        <div id="lobby" class="max-w-3xl mx-auto bg-white rounded-xl shadow-md overflow-hidden p-6">
+            <h1 class="text-3xl font-bold text-center text-indigo-700 mb-6">Thought Trap Escape</h1>
+            
+            <!-- Session Setup -->
+            <div class="mb-8">
+                <h2 class="text-xl font-semibold mb-4">Game Setup</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Game Mode -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Game Mode</label>
+                        <div class="flex space-x-2">
+                            <button id="coop-mode" class="flex-1 py-2 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                Co-op
+                            </button>
+                            <button id="versus-mode" class="flex-1 py-2 px-4 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                Versus
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Timer -->
+                    <div>
+                        <label for="timer" class="block text-sm font-medium text-gray-700 mb-1">Round Time (minutes)</label>
+                        <select id="timer" class="w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                            <option value="6">6</option>
+                            <option value="8" selected>8</option>
+                            <option value="10">10</option>
+                            <option value="12">12</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Locks per Round -->
+                    <div>
+                        <label for="locks" class="block text-sm font-medium text-gray-700 mb-1">Locks per Round</label>
+                        <select id="locks" class="w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                            <option value="3">3</option>
+                            <option value="4" selected>4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Content Pack -->
+                    <div>
+                        <label for="content-pack" class="block text-sm font-medium text-gray-700 mb-1">Content Pack</label>
+                        <select id="content-pack" class="w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                            <option value="default">Core Thought Traps</option>
+                            <option value="social">Social Situations</option>
+                            <option value="school">School & Learning</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Team Setup -->
+            <div class="mb-8">
+                <h2 class="text-xl font-semibold mb-4">Teams</h2>
+                <div id="teams-container">
+                    <!-- Team 1 -->
+                    <div class="team-card mb-4 p-4 bg-blue-50 rounded-lg" data-team-id="1">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-medium">Team 1</h3>
+                            <button class="delete-team text-red-500 hover:text-red-700 focus:outline-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </div>
+                        <input type="text" value="Team 1" class="team-name w-full py-1 px-2 border border-gray-300 rounded-md mb-2">
+                        <div class="flex items-center">
+                            <span class="mr-2 text-sm">Color:</span>
+                            <select class="team-color py-1 px-2 border border-gray-300 rounded-md">
+                                <option value="blue" selected>Blue</option>
+                                <option value="red">Red</option>
+                                <option value="green">Green</option>
+                                <option value="purple">Purple</option>
+                                <option value="yellow">Yellow</option>
+                                <option value="pink">Pink</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Team 2 -->
+                    <div class="team-card mb-4 p-4 bg-red-50 rounded-lg" data-team-id="2">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-medium">Team 2</h3>
+                            <button class="delete-team text-red-500 hover:text-red-700 focus:outline-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </div>
+                        <input type="text" value="Team 2" class="team-name w-full py-1 px-2 border border-gray-300 rounded-md mb-2">
+                        <div class="flex items-center">
+                            <span class="mr-2 text-sm">Color:</span>
+                            <select class="team-color py-1 px-2 border border-gray-300 rounded-md">
+                                <option value="blue">Blue</option>
+                                <option value="red" selected>Red</option>
+                                <option value="green">Green</option>
+                                <option value="purple">Purple</option>
+                                <option value="yellow">Yellow</option>
+                                <option value="pink">Pink</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <button id="add-team" class="mt-2 py-2 px-4 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    + Add Team
+                </button>
+            </div>
+            
+            <!-- Content Filters -->
+            <div class="mb-8">
+                <h2 class="text-xl font-semibold mb-4">Content Filters</h2>
+                <p class="text-sm text-gray-600 mb-3">Exclude locks with these tags:</p>
+                <div class="flex flex-wrap gap-2">
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" class="content-filter h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" data-filter="school">
+                        <span class="ml-2 text-sm">School</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" class="content-filter h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" data-filter="family">
+                        <span class="ml-2 text-sm">Family</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" class="content-filter h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" data-filter="work">
+                        <span class="ml-2 text-sm">Work</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" class="content-filter h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" data-filter="relationships">
+                        <span class="ml-2 text-sm">Relationships</span>
+                    </label>
+                </div>
+            </div>
+            
+            <!-- Accessibility Options -->
+            <div class="mb-8">
+                <h2 class="text-xl font-semibold mb-4">Accessibility</h2>
+                <div class="space-y-3">
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" id="high-contrast" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                        <span class="ml-2">High Contrast Mode</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" id="large-text" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                        <span class="ml-2">Large Text</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" id="reduce-motion" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                        <span class="ml-2">Reduce Motion</span>
+                    </label>
+                </div>
+            </div>
+            
+            <!-- Start Game -->
+            <div class="text-center">
+                <button id="start-game" class="py-3 px-8 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    Start Game
+                </button>
+            </div>
+        </div>
+        
+        <!-- Escape Room Screen (Hidden Initially) -->
+        <div id="escape-room" class="hidden">
+            <!-- Header with Timer and Teams -->
+            <div class="bg-white rounded-xl shadow-md p-4 mb-6">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <!-- Timer -->
+                    <div class="mb-4 md:mb-0 w-full md:w-1/3">
+                        <div class="flex items-center">
+                            <span class="text-lg font-semibold mr-3">Time Left:</span>
+                            <span id="timer-display" class="text-2xl font-bold">08:00</span>
+                            <button id="pause-btn" class="ml-4 py-1 px-3 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                Pause
+                            </button>
+                        </div>
+                        <div id="timer-bar" class="timer-bar mt-2 rounded-full" style="width: 100%"></div>
+                        
+                        <!-- Turn Timer (for versus mode) -->
+                        <div id="turn-timer-container" class="hidden mt-2">
+                            <div class="flex items-center">
+                                <span class="text-sm font-medium mr-2">Turn Time:</span>
+                                <span id="turn-timer-display" class="text-lg font-bold">01:00</span>
+                            </div>
+                            <div id="turn-timer-bar" class="timer-bar mt-1 rounded-full" style="width: 100%; height: 8px;"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Team Scores -->
+                    <div class="w-full md:w-2/3">
+                        <div id="team-scores" class="flex flex-wrap justify-center md:justify-end gap-4">
+                            <!-- Team scores will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Current Turn Indicator (for versus mode) -->
+                <div id="current-turn-indicator" class="hidden mt-4 p-3 rounded-lg border-2 border-dashed">
+                    <div class="flex items-center justify-center">
+                        <span class="text-lg font-semibold mr-2">Current Turn:</span>
+                        <span id="current-team-name" class="text-xl font-bold"></span>
+                        <div id="current-team-color" class="w-6 h-6 rounded-full ml-2"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Progress Lights -->
+            <div id="progress-lights" class="flex justify-center gap-4 mb-8">
+                <!-- Progress lights will be populated by JavaScript -->
+            </div>
+            
+            <!-- Locks Grid -->
+            <div id="locks-grid" class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <!-- Locks will be populated by JavaScript -->
+            </div>
+            
+            <!-- Game Controls -->
+            <div class="mt-8 text-center">
+                <button id="end-game" class="py-2 px-6 bg-red-600 text-white font-medium rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 mr-4">
+                    End Game
+                </button>
+                <button id="new-round" class="py-2 px-6 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                    New Round
+                </button>
+            </div>
+        </div>
+        
+        <!-- Lock Detail Modal -->
+        <div id="lock-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+            <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+                <div class="mt-3">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 id="lock-title" class="text-lg font-medium text-gray-900"></h3>
+                        <button id="close-modal" class="text-gray-400 hover:text-gray-600">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="lock-content" class="mb-6">
+                        <!-- Lock content will be populated by JavaScript -->
+                    </div>
+                    
+                    <!-- Co-op Mode Buttons -->
+                    <div id="coop-buttons" class="flex justify-end space-x-3">
+                        <button id="mark-solved" class="py-2 px-4 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">
+                            Mark as Solved
+                        </button>
+                        <button id="close-lock" class="py-2 px-4 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                            Close
+                        </button>
+                    </div>
+                    
+                    <!-- Versus Mode Buttons -->
+                    <div id="versus-buttons" class="hidden">
+                        <!-- Current Team Actions -->
+                        <div id="current-team-actions" class="mb-4 p-3 rounded-lg border">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="font-semibold">Current Turn: <span id="modal-current-team"></span></span>
+                                <div class="flex items-center">
+                                    <span class="text-sm mr-2">Turn Time:</span>
+                                    <span id="modal-turn-timer" class="font-bold">01:00</span>
+                                </div>
+                            </div>
+                            <div class="flex space-x-3">
+                                <button id="team-solved" class="flex-1 py-2 px-4 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">
+                                    ✓ Solved by Current Team
+                                </button>
+                                <button id="pass-turn" class="py-2 px-4 bg-yellow-600 text-white rounded-md hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                                    Pass Turn
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Steal Options -->
+                        <div id="steal-options" class="mb-4 p-3 rounded-lg border border-orange-300 bg-orange-50">
+                            <h4 class="font-semibold mb-2 text-orange-800">Other teams can steal:</h4>
+                            <div id="steal-buttons" class="flex flex-wrap gap-2">
+                                <!-- Steal buttons will be populated by JavaScript -->
+                            </div>
+                        </div>
+                        
+                        <!-- General Actions -->
+                        <div class="flex justify-end space-x-3">
+                            <button id="skip-lock" class="py-2 px-4 bg-gray-400 text-white rounded-md hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                                Skip Lock
+                            </button>
+                            <button id="close-lock-versus" class="py-2 px-4 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Game Over Modal -->
+        <div id="game-over-modal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+            <div class="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+                <div class="mt-3 text-center">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Game Over!</h3>
+                    <div id="final-scores" class="mb-6">
+                        <!-- Final scores will be populated by JavaScript -->
+                    </div>
+                    <div class="flex justify-center space-x-3">
+                        <button id="play-again" class="py-2 px-6 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            Play Again
+                        </button>
+                        <button id="back-to-lobby" class="py-2 px-6 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                            Back to Lobby
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="config.js"></script>
+    <script src="game-data.js"></script>
+    <script src="game-logic.js"></script>
+</body>
+</html>

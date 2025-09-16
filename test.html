@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thought Trap Escape - Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        .pass { color: green; }
+        .fail { color: red; }
+        .info { color: blue; }
+    </style>
+</head>
+<body>
+    <h1>Thought Trap Escape - Test Suite</h1>
+    
+    <div class="test-section">
+        <h2>File Loading Tests</h2>
+        <div id="file-tests"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Data Structure Tests</h2>
+        <div id="data-tests"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Game Logic Tests</h2>
+        <div id="logic-tests"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Quick Game Demo</h2>
+        <button onclick="runQuickDemo()">Run Quick Demo</button>
+        <div id="demo-output"></div>
+    </div>
+    
+    <script src="config.js"></script>
+    <script src="game-data.js"></script>
+    <script>
+        // Test runner
+        function runTests() {
+            testFileLoading();
+            testDataStructures();
+            testGameLogic();
+        }
+        
+        function testFileLoading() {
+            const output = document.getElementById('file-tests');
+            let results = [];
+            
+            // Test config loading
+            try {
+                if (typeof GAME_CONFIG !== 'undefined') {
+                    results.push('<span class="pass">✓ Config file loaded successfully</span>');
+                } else {
+                    results.push('<span class="fail">✗ Config file failed to load</span>');
+                }
+            } catch (e) {
+                results.push('<span class="fail">✗ Config file error: ' + e.message + '</span>');
+            }
+            
+            // Test game data loading
+            try {
+                if (typeof GAME_DATA !== 'undefined') {
+                    results.push('<span class="pass">✓ Game data file loaded successfully</span>');
+                } else {
+                    results.push('<span class="fail">✗ Game data file failed to load</span>');
+                }
+            } catch (e) {
+                results.push('<span class="fail">✗ Game data file error: ' + e.message + '</span>');
+            }
+            
+            output.innerHTML = results.join('<br>');
+        }
+        
+        function testDataStructures() {
+            const output = document.getElementById('data-tests');
+            let results = [];
+            
+            // Test thought traps
+            try {
+                const defaultTraps = GAME_DATA.thoughtTraps.default;
+                if (Array.isArray(defaultTraps) && defaultTraps.length > 0) {
+                    results.push(`<span class="pass">✓ Default thought traps loaded (${defaultTraps.length} items)</span>`);
+                    
+                    // Test first trap structure
+                    const firstTrap = defaultTraps[0];
+                    const requiredFields = ['id', 'title', 'description', 'example', 'tags', 'difficulty'];
+                    const hasAllFields = requiredFields.every(field => field in firstTrap);
+                    
+                    if (hasAllFields) {
+                        results.push('<span class="pass">✓ Thought trap structure is valid</span>');
+                    } else {
+                        results.push('<span class="fail">✗ Thought trap structure is missing required fields</span>');
+                    }
+                } else {
+                    results.push('<span class="fail">✗ Default thought traps not found or empty</span>');
+                }
+            } catch (e) {
+                results.push('<span class="fail">✗ Thought traps test error: ' + e.message + '</span>');
+            }
+            
+            // Test keys
+            try {
+                const defaultKeys = GAME_DATA.keys.default;
+                if (Array.isArray(defaultKeys) && defaultKeys.length > 0) {
+                    results.push(`<span class="pass">✓ Default keys loaded (${defaultKeys.length} items)</span>`);
+                } else {
+                    results.push('<span class="fail">✗ Default keys not found or empty</span>');
+                }
+            } catch (e) {
+                results.push('<span class="fail">✗ Keys test error: ' + e.message + '</span>');
+            }
+            
+            // Test team colors
+            try {
+                const teamColors = GAME_DATA.teamColors;
+                if (typeof teamColors === 'object' && Object.keys(teamColors).length > 0) {
+                    results.push(`<span class="pass">✓ Team colors loaded (${Object.keys(teamColors).length} colors)</span>`);
+                } else {
+                    results.push('<span class="fail">✗ Team colors not found or empty</span>');
+                }
+            } catch (e) {
+                results.push('<span class="fail">✗ Team colors test error: ' + e.message + '</span>');
+            }
+            
+            output.innerHTML = results.join('<br>');
+        }
+        
+        function testGameLogic() {
+            const output = document.getElementById('logic-tests');
+            let results = [];
+            
+            // Test GameDataUtils
+            try {
+                if (typeof GameDataUtils !== 'undefined') {
+                    results.push('<span class="pass">✓ GameDataUtils available</span>');
+                    
+                    // Test getThoughtTraps
+                    const traps = GameDataUtils.getThoughtTraps('default', [], 3);
+                    if (Array.isArray(traps) && traps.length === 3) {
+                        results.push('<span class="pass">✓ getThoughtTraps returns correct number of traps</span>');
+                    } else {
+                        results.push('<span class="fail">✗ getThoughtTraps returned unexpected result</span>');
+                    }
+                    
+                    // Test getKey
+                    const key = GameDataUtils.getKey(1);
+                    if (key && key.thoughtTrapId === 1) {
+                        results.push('<span class="pass">✓ getKey returns correct key</span>');
+                    } else {
+                        results.push('<span class="fail">✗ getKey returned unexpected result</span>');
+                    }
+                    
+                } else {
+                    results.push('<span class="fail">✗ GameDataUtils not available</span>');
+                }
+            } catch (e) {
+                results.push('<span class="fail">✗ GameDataUtils test error: ' + e.message + '</span>');
+            }
+            
+            // Test ConfigUtils
+            try {
+                if (typeof ConfigUtils !== 'undefined') {
+                    results.push('<span class="pass">✓ ConfigUtils available</span>');
+                    
+                    // Test config get
+                    const defaultTime = ConfigUtils.get('defaults.timeLimit');
+                    if (defaultTime === 8) {
+                        results.push('<span class="pass">✓ ConfigUtils.get works correctly</span>');
+                    } else {
+                        results.push('<span class="fail">✗ ConfigUtils.get returned unexpected result</span>');
+                    }
+                } else {
+                    results.push('<span class="fail">✗ ConfigUtils not available</span>');
+                }
+            } catch (e) {
+                results.push('<span class="fail">✗ ConfigUtils test error: ' + e.message + '</span>');
+            }
+            
+            output.innerHTML = results.join('<br>');
+        }
+        
+        function runQuickDemo() {
+            const output = document.getElementById('demo-output');
+            let demo = [];
+            
+            try {
+                // Get some sample data
+                const sampleTraps = GameDataUtils.getThoughtTraps('default', [], 2);
+                demo.push('<h3>Sample Thought Traps:</h3>');
+                
+                sampleTraps.forEach((trap, index) => {
+                    demo.push(`<div style="margin: 10px 0; padding: 10px; background: #f0f0f0; border-radius: 5px;">`);
+                    demo.push(`<strong>${trap.title}</strong><br>`);
+                    demo.push(`<em>${trap.description}</em><br>`);
+                    demo.push(`<small>Example: "${trap.example}"</small><br>`);
+                    demo.push(`<small>Tags: ${trap.tags.join(', ')} | Difficulty: ${trap.difficulty}</small>`);
+                    
+                    // Get corresponding key
+                    const key = GameDataUtils.getKey(trap.id);
+                    if (key) {
+                        demo.push(`<br><strong>Key:</strong> ${key.title}<br>`);
+                        demo.push(`<small>${key.description}</small>`);
+                    }
+                    
+                    demo.push('</div>');
+                });
+                
+                // Show team colors
+                demo.push('<h3>Available Team Colors:</h3>');
+                Object.entries(GAME_DATA.teamColors).forEach(([key, value]) => {
+                    demo.push(`<span style="display: inline-block; margin: 5px; padding: 5px 10px; background-color: ${value.color}; color: white; border-radius: 3px;">${value.display}</span>`);
+                });
+                
+            } catch (e) {
+                demo.push('<span class="fail">Demo error: ' + e.message + '</span>');
+            }
+            
+            output.innerHTML = demo.join('');
+        }
+        
+        // Run tests when page loads
+        window.addEventListener('load', runTests);
+    </script>
+</body>
+</html>

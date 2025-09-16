@@ -1,0 +1,40 @@
+{
+  "name": "thought-trap-escape",
+  "version": "1.0.0",
+  "description": "An educational escape room game focused on identifying and overcoming cognitive distortions",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "serve": "python3 -m http.server 8000",
+    "dev": "open index.html"
+  },
+  "keywords": [
+    "education",
+    "mental-health",
+    "cognitive-behavioral-therapy",
+    "game",
+    "escape-room",
+    "thought-traps",
+    "cognitive-distortions"
+  ],
+  "author": "Thought Trap Development Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/thought-trap-escape.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/thought-trap-escape/issues"
+  },
+  "homepage": "https://github.com/your-username/thought-trap-escape#readme",
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ],
+  "devDependencies": {},
+  "dependencies": {}
+}

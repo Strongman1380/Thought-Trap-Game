@@ -1,0 +1,533 @@
+/* Custom CSS for animations and elements not covered by Tailwind */
+
+/* Lock Dial Styles */
+.lock-dial {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: conic-gradient(
+        #4ade80 0% 33%,
+        #f59e0b 33% 66%,
+        #3b82f6 66% 100%
+    );
+    transition: transform 0.3s ease;
+}
+
+.lock-dial:hover {
+    transform: scale(1.05);
+}
+
+.lock-dial-inner {
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    background: white;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.lock-dial-inner:hover {
+    background: #f3f4f6;
+}
+
+.lock-dial.solved {
+    background: conic-gradient(
+        #10b981 0% 100%
+    );
+}
+
+.lock-dial.solved .lock-dial-inner {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+/* Progress Lights */
+.progress-light {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid #e5e7eb;
+    background-color: #f9fafb;
+    transition: all 0.3s ease;
+}
+
+.progress-light.on {
+    background-color: #10b981;
+    border-color: #10b981;
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+}
+
+/* Timer Bar */
+.timer-bar {
+    height: 12px;
+    background: linear-gradient(to right, #10b981, #f59e0b, #ef4444);
+    transition: width 0.5s linear;
+    border-radius: 6px;
+}
+
+/* Lock Card Styles */
+.lock-card {
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.lock-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border-color: #6366f1;
+}
+
+.lock-card.solved {
+    background-color: #d1fae5;
+    border-color: #10b981;
+}
+
+.lock-card.solved:hover {
+    border-color: #059669;
+}
+
+/* Team Color Classes */
+.team-blue { background-color: #dbeafe; border-color: #3b82f6; }
+.team-red { background-color: #fee2e2; border-color: #ef4444; }
+.team-green { background-color: #d1fae5; border-color: #10b981; }
+.team-purple { background-color: #e9d5ff; border-color: #8b5cf6; }
+.team-yellow { background-color: #fef3c7; border-color: #f59e0b; }
+.team-pink { background-color: #fce7f3; border-color: #ec4899; }
+
+/* Team Score Indicators */
+.team-score {
+    transition: all 0.3s ease;
+}
+
+.team-score.leading {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.team-score.current-turn {
+    border: 3px solid #fbbf24;
+    box-shadow: 0 0 15px rgba(251, 191, 36, 0.5);
+    animation: currentTurnPulse 2s infinite;
+}
+
+@keyframes currentTurnPulse {
+    0%, 100% { 
+        box-shadow: 0 0 15px rgba(251, 191, 36, 0.5);
+    }
+    50% { 
+        box-shadow: 0 0 25px rgba(251, 191, 36, 0.8);
+    }
+}
+
+/* Turn Indicator Styles */
+.current-turn-indicator {
+    background: linear-gradient(135deg, #fef3c7 0%, #fbbf24 100%);
+    border-color: #f59e0b;
+    animation: turnIndicatorGlow 3s infinite;
+}
+
+@keyframes turnIndicatorGlow {
+    0%, 100% { 
+        border-color: #f59e0b;
+        background: linear-gradient(135deg, #fef3c7 0%, #fbbf24 100%);
+    }
+    50% { 
+        border-color: #d97706;
+        background: linear-gradient(135deg, #fed7aa 0%, #f59e0b 100%);
+    }
+}
+
+/* Turn Timer Styles */
+.turn-timer-bar {
+    height: 8px;
+    background: linear-gradient(to right, #10b981, #f59e0b, #ef4444);
+    transition: width 1s linear;
+    border-radius: 4px;
+}
+
+.turn-timer-warning {
+    animation: timerWarning 1s infinite alternate;
+}
+
+@keyframes timerWarning {
+    from { opacity: 1; }
+    to { opacity: 0.6; }
+}
+
+.turn-timer-critical {
+    animation: timerCritical 0.5s infinite alternate;
+}
+
+@keyframes timerCritical {
+    from { 
+        background: linear-gradient(to right, #ef4444, #dc2626);
+        transform: scale(1);
+    }
+    to { 
+        background: linear-gradient(to right, #dc2626, #b91c1c);
+        transform: scale(1.02);
+    }
+}
+
+/* Lock States for Turn-Based Play */
+.lock-card.current-turn-available {
+    border-color: #10b981;
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+    animation: availableLockPulse 2s infinite;
+}
+
+@keyframes availableLockPulse {
+    0%, 100% { 
+        box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+    }
+    50% { 
+        box-shadow: 0 0 25px rgba(16, 185, 129, 0.6);
+    }
+}
+
+.lock-card.not-current-turn {
+    opacity: 0.6;
+    cursor: not-allowed;
+    filter: grayscale(30%);
+}
+
+.lock-card.not-current-turn:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+/* Steal Button Styles */
+.steal-button {
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.steal-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.steal-button.team-blue { 
+    background-color: #3b82f6; 
+    border-color: #2563eb;
+}
+
+.steal-button.team-red { 
+    background-color: #ef4444; 
+    border-color: #dc2626;
+}
+
+.steal-button.team-green { 
+    background-color: #10b981; 
+    border-color: #059669;
+}
+
+.steal-button.team-purple { 
+    background-color: #8b5cf6; 
+    border-color: #7c3aed;
+}
+
+.steal-button.team-yellow { 
+    background-color: #f59e0b; 
+    border-color: #d97706;
+}
+
+.steal-button.team-pink { 
+    background-color: #ec4899; 
+    border-color: #db2777;
+}
+
+/* Modal Animations */
+.modal-enter {
+    animation: modalEnter 0.3s ease-out;
+}
+
+.modal-exit {
+    animation: modalExit 0.3s ease-in;
+}
+
+@keyframes modalEnter {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes modalExit {
+    from {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.9) translateY(-20px);
+    }
+}
+
+/* Pulse Animation for Active Elements */
+.pulse-animation {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+/* Game State Indicators */
+.game-paused {
+    filter: grayscale(50%);
+}
+
+.game-paused .timer-bar {
+    animation: pausedPulse 1s infinite alternate;
+}
+
+@keyframes pausedPulse {
+    from { opacity: 0.5; }
+    to { opacity: 1; }
+}
+
+/* Responsive Design Enhancements */
+@media (min-width: 768px) {
+    .lock-dial {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .lock-dial-inner {
+        width: 110px;
+        height: 110px;
+        font-size: 1.4rem;
+    }
+    
+    .progress-light {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+@media (max-width: 640px) {
+    .lock-dial {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .lock-dial-inner {
+        width: 75px;
+        height: 75px;
+        font-size: 1rem;
+    }
+    
+    .progress-light {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+/* Accessibility Modes */
+.high-contrast .bg-gray-100 {
+    background-color: #000 !important;
+    color: #fff !important;
+}
+
+.high-contrast .text-gray-800 {
+    color: #fff !important;
+}
+
+.high-contrast .bg-white {
+    background-color: #000 !important;
+    border-color: #fff !important;
+    color: #fff !important;
+}
+
+.high-contrast .lock-dial-inner {
+    background: #000 !important;
+    color: #fff !important;
+    border: 2px solid #fff;
+}
+
+.high-contrast .lock-card {
+    background-color: #000 !important;
+    border-color: #fff !important;
+    color: #fff !important;
+}
+
+.large-text {
+    font-size: 1.25rem;
+}
+
+.large-text .text-lg {
+    font-size: 1.5rem;
+}
+
+.large-text .text-xl {
+    font-size: 2rem;
+}
+
+.large-text .text-2xl {
+    font-size: 2.5rem;
+}
+
+.large-text .text-3xl {
+    font-size: 3rem;
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+    
+    .lock-dial:hover {
+        transform: none;
+    }
+    
+    .lock-card:hover {
+        transform: none;
+    }
+}
+
+.reduce-motion * {
+    animation: none !important;
+    transition: none !important;
+}
+
+.reduce-motion .lock-dial:hover {
+    transform: none;
+}
+
+.reduce-motion .lock-card:hover {
+    transform: none;
+}
+
+/* Loading States */
+.loading {
+    position: relative;
+    overflow: hidden;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.4),
+        transparent
+    );
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* Success/Error States */
+.success-flash {
+    animation: successFlash 0.6s ease-out;
+}
+
+.error-flash {
+    animation: errorFlash 0.6s ease-out;
+}
+
+@keyframes successFlash {
+    0% { background-color: transparent; }
+    50% { background-color: rgba(16, 185, 129, 0.3); }
+    100% { background-color: transparent; }
+}
+
+@keyframes errorFlash {
+    0% { background-color: transparent; }
+    50% { background-color: rgba(239, 68, 68, 0.3); }
+    100% { background-color: transparent; }
+}
+
+/* Thought Trap Specific Styles */
+.thought-trap-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.thought-trap-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.thought-trap-description {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    opacity: 0.9;
+}
+
+.key-card {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    border-radius: 12px;
+    padding: 1rem;
+    text-align: center;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Celebration Effects */
+.celebration {
+    position: relative;
+    overflow: hidden;
+}
+
+.celebration::before {
+    content: '🎉';
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2rem;
+    animation: celebrate 1s ease-out;
+}
+
+@keyframes celebrate {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px) scale(0);
+    }
+    50% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(-10px) scale(1.2);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-30px) scale(1);
+    }
+}
